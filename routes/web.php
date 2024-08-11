@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\UserLoginController;
+use App\Http\Controllers\RegisterNewUserController;
 use App\Http\Controllers\RegisterShowController;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -13,32 +14,45 @@ Route::get('/', function () {
 
 Route::group(['before' => 'auth'], function () {
     Route::get('/', function () {
-        if(!Auth::guest()){
-            return redirect('login');
-        }
+        // if(!Auth::guest()){
+        //     return redirect('login');
+        // }
 
         return view('welcome');
     });
 
-    Route::get('login', LoginController::class)->name('login');
-    Route::post('login', function () {
-        return new JsonResponse();
-    })->name("login.post");
+    Route::get('login', function() {
+        if (!Auth::guest()) {
+            return redirect('/');
+        }
+
+        return view("login");
+    })->name('login');
+
+    Route::post('login', UserLoginController::class)->name("login.post");
 
     Route::get("register", function () {
+        if (!Auth::guest()) {
+            return redirect('/');
+        }
+
         return view("register");
     })->name("register");
 
-    Route::post("register", function () {
-        dd(Request::all());
-    })->name("register.post");
-});
+    Route::post("register", RegisterNewUserController::class)->name("register.post");
+    Route::get("logout", function() {
+        if (Auth::guest()) {
+            return redirect()->back();
+        }
 
-Route::get('login', LoginController::class)->name('login');
+        Auth::logout();
+        return redirect('/');
+    });
+});
 // Route::get('register', RegisterShowController::class)->name('register');
 
-Route::get('posts');
-Route::get('me');
-Route::get('peoples');
-Route::get('peoples/{username}');
-Route::get('peoples/{username}');
+// Route::get('posts');
+// Route::get('me');
+// Route::get('peoples');
+// Route::get('peoples/{username}');
+// Route::get('peoples/{username}');
