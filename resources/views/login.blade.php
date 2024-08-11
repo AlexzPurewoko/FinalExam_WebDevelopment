@@ -12,6 +12,8 @@
     </head>
 
     <body>
+        @include('partials.error-popup')
+
         <div class="md:container md:mx-auto">
 
             <h2 class="text-center md:text-[40px] font-medium mt-60"> Masuk </h2>
