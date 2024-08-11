@@ -12,6 +12,22 @@
     </head>
 
     <body>
+        @if ($errors->any())
+            <div id="error-popup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <div class="bg-white rounded-lg shadow-lg p-6 w-1/3">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-lg font-semibold text-red-600">Errors</h2>
+                        <button id="close-popup" class="text-gray-600 hover:text-gray-900">&times;</button>
+                    </div>
+                    <ul class="mt-4">
+                        @foreach ($errors->all() as $error)
+                            <li class="text-red-600">{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
+
         <div class="md:container md:mx-auto">
 
             <h2 class="text-center md:text-[40px] font-medium mt-60"> Register </h2>
@@ -40,7 +56,7 @@
                     sm:text-sm md:text-xl focus:ring-1 disabled:shadow-none"
                 placeholder="Your password here">
 
-                <input type="password" name="confirm_password" id="confirm_password" class="
+                <input type="password" name="password_confirmation" id="password_confirmation" class="
                     mx-auto mt-6
                     px-3 py-2 bg-white border shadow-sm
                     border-slate-300 placeholder-slate-400
@@ -59,5 +75,11 @@
             </form>
             <p class="mt-6 md:text-lg text-center">Sudah punya akun ? <a class="underline text-sky-500" href="{{{ route('login') }}}">Masuk</a></p>
         </div>
+
+        <script>
+            document.getElementById('close-popup')?.addEventListener('click', function () {
+                document.getElementById('error-popup').style.display = 'none';
+            });
+        </script>
     </body>
 </html>
