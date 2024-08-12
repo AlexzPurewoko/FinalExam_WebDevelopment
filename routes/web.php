@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\OnboardingNewUserController;
+use App\Http\Controllers\ShowOnboardingController;
 use App\Http\Controllers\UserLoginController;
 use App\Http\Controllers\RegisterNewUserController;
 use App\Http\Controllers\RegisterShowController;
 use App\Models\User;
+use App\Models\UserProfiles;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
@@ -12,12 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['before' => 'auth'], function () {
+// Route::group(function () {
     Route::get('/', function () {
-        // if(!Auth::guest()){
-        //     return redirect('login');
-        // }
-
         return view('welcome');
     });
 
@@ -48,7 +47,10 @@ Route::group(['before' => 'auth'], function () {
         Auth::logout();
         return redirect('/');
     });
-});
+
+    Route::get('onboarding', ShowOnboardingController::class);
+    Route::post('onboarding', OnboardingNewUserController::class)->name('onboarding.post');
+// });
 // Route::get('register', RegisterShowController::class)->name('register');
 
 // Route::get('posts');

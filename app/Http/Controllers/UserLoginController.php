@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Auth;
+use App\Models\User;
 
 class UserLoginController extends Controller
 {
@@ -20,8 +21,14 @@ class UserLoginController extends Controller
         ]);
 
         // Attempt to login
-        Auth::attempt(['email' => $fields['email'], 'password' => $fields['password']]);
+        if (Auth::attempt($fields)) {
+            $request->session()->regenerate();
 
-        return redirect('/');
+            return redirect()->intended('/');
+        }
+
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ])->onlyInput('email');
     }
 }
